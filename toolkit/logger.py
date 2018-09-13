@@ -1,3 +1,5 @@
+# Copyright (c) 2018 SH
+
 from os import makedirs, path
 from sys import exit
 

@@ -1,3 +1,5 @@
+# Copyright (c) 2018 SH
+
 from pprint import PrettyPrinter
 
 import tensorflow as tf
