@@ -35,7 +35,8 @@ class SimpleLogger(object):
         # fin
         return
 
-    def write_progress(self, mode= 'train', epoch_raw=-1, epoch_max=-1, iter_raw=-1, iter_max=-1, loss=0):
+    def write_progress(self, mode= 'train', epoch_raw=-1, epoch_max=-1, iter_raw=-1, iter_max=-1, loss=0,
+                       display=True):
 
         # write model fitting progress
 
@@ -55,6 +56,11 @@ class SimpleLogger(object):
 
         self._progress_writer.write(msg + '\n')
         self._progress_writer.flush()
+
+        if display:
+            print(msg)
+        else:
+            pass
 
         # fin
         return
