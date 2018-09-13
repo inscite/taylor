@@ -102,3 +102,14 @@ def tf_log_b_x(x=None, base=10):
 
     # fin
     return num / denom
+
+
+def get_loss_for_summary(prediction=None, label=None):
+
+    mae = mean_abs_error_l1(labels=label, predictions=prediction)
+    mse = mean_sqrt_error_l2(labels=label, predictions=prediction)
+    rmse = root_mean_sqrt_error(labels=label, predictions=prediction)
+    psnr = peak_signal_to_noise_ratio(labels=label, predictions=prediction)
+
+    # fin
+    return
