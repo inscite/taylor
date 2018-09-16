@@ -11,7 +11,9 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+from os import path
 from pprint import PrettyPrinter
+from sys import exit
 
 import tensorflow as tf
 
@@ -46,3 +48,36 @@ def get_graph_col_dict_filtered(collection=None, f_list=None, verbose=False):
 
     # fin
     return g_col_ops, g_col_f_ops
+
+
+def restore_ckpt(sess=None, saver=None, ckpt_dir=None, model_name=None,
+                 saver_ops_dict=None, saver_max_to_keep=None, exit_when_failed=True):
+
+    _saver = None
+    latest_ckpt_step = 0
+
+    if saver is None:
+        _saver = tf.train.Saver(var_list=saver_ops_dict, max_to_keep=saver_max_to_keep)
+    else:
+        _saver = saver
+
+    # load checkpoint iff there exists correct checkpoint
+    if tf.train.checkpoint_exists(checkpoint_prefix=ckpt_dir):
+        # in-line checkpoint restoration
+        latest_path = tf.train.latest_checkpoint(checkpoint_dir=ckpt_dir)
+        latest_ckpt_name = path.basename(latest_path)
+        latest_ckpt_step = int(latest_ckpt_name.replace(model_name + '-', '')) + 1
+
+        print('[D] Started restoring Model {:s} from {:s}'.format(model_name, latest_ckpt_name))
+        _saver.restore(sess=sess, save_path=latest_path)
+
+        print('[D] Model {:s} restored from {:s} successfully!'.format(model_name, latest_ckpt_name))
+    else:
+        print('[D] Failed to load pre-trained model')
+        if exit_when_failed:
+            exit(-1)
+        else:
+            pass
+
+    # fin
+    return _saver, latest_ckpt_step
